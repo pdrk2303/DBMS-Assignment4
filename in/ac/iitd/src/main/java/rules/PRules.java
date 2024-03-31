@@ -19,7 +19,7 @@ import rel.PProject;
 import rel.PTableScan;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-// TODO: Do we need PTableScanRule Now?
+
 public class PRules {
 
     private PRules(){
