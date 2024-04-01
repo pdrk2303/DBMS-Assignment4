@@ -24,8 +24,6 @@ import org.apache.log4j.Logger;
 
 import java.util.Iterator;
 
-// TODO: Check new functions thoroughly
-
 // DB362 Storage Manager
 public class StorageManager {
 
