@@ -487,7 +487,7 @@ public class StorageManager {
             }
             else if(type == ColumnType.DOUBLE.ordinal()){
                 if((block[offset + nullbitmap_offset + i / 8] & (1 << (7 - bitmap_idx))) == 0){
-                    long val = (block[offset + idx] & 0xFF) | ((block[offset + idx + 1] & 0xFF) << 8) | ((block[offset + idx + 2] & 0xFF) << 16) | ((block[offset + idx + 3] & 0xFF) << 24) | ((block[offset + idx + 4] & 0xFF) << 32) | ((block[offset + idx + 5] & 0xFF) << 40) | ((block[offset + idx + 6] & 0xFF) << 48) | ((block[offset + idx + 7] & 0xFF) << 56);
+                    long val = ((long) block[offset + idx] & 0xFF) | (((long) block[offset + idx + 1] & 0xFF) << 8) | (((long) block[offset + idx + 2] & 0xFF) << 16) | (((long) block[offset + idx + 3] & 0xFF) << 24) | (((long) block[offset + idx + 4] & 0xFF) << 32) | (((long) block[offset + idx + 5] & 0xFF) << 40) | (((long) block[offset + idx + 6] & 0xFF) << 48) | (((long) block[offset + idx + 7] & 0xFF) << 56);
                     Double double_val = Double.longBitsToDouble(val);
                     record[i] = double_val;
                 }

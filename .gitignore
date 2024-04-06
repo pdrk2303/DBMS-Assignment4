@@ -24,3 +24,11 @@ TODO.md
 
 # tex files
 *.tex
+
+# IntelliJ IDEA
+out/
+.idea/
+*.iws
+*.iml
+
+in/ac/iitd/src/test/java/MyTest.java
