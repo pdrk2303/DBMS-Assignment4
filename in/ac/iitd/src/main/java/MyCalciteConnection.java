@@ -41,6 +41,7 @@ import org.apache.log4j.Logger;
 
 import manager.StorageManager;
 import executor.QueryExecutor;
+import convention.PConvention;
 
 import java.util.Properties;
 import java.util.Collections;
@@ -198,6 +199,29 @@ public class MyCalciteConnection {
 
     public List<Object[]> executeQuery(RelNode relNode) {
         return query_executor.execute(relNode);
+    }
+
+    // Bonus Part for A4
+    public List<Object[]> executeQueryBonus(String query, RuleSet rules) {
+        try {
+            SqlNode sqlNode = parseSql(query);
+            SqlNode validatedSqlNode = validateSql(sqlNode);
+            RelNode logicalPlan = convertSql(validatedSqlNode);
+            RelNode physicalPlan = logicalToPhysical(logicalPlan, logicalPlan.getTraitSet().plus(PConvention.INSTANCE), rules);
+            List<Object[]> result = executeQuery(physicalPlan);
+            
+            /* 
+                Write your code here 
+                You can post-process the result here, if needed
+            */
+
+            return result;
+        }
+        catch (Exception e) {
+            logger.error("Error in executing query", e);
+            logger.error("Cause: ", e.getCause());
+            return null;
+        }
     }
 
 }

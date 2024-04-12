@@ -284,4 +284,30 @@ public class PrimaryTestCases {
         return;
     }
     
+    @Test
+    public void testBonus(){
+        try{
+            MyCalciteConnection calciteConnection = new MyCalciteConnection();
+            String query = "select first_name from actor order by first_name, last_name";
+            
+            List<Object []> result = calciteConnection.executeQueryBonus(query, rules);
+
+            // print result
+            for(Object [] row : result){
+                for(Object col : row){
+                    System.out.print(col + " ");
+                }
+                System.out.println();
+            }
+
+            calciteConnection.close();
+        }
+        catch(Exception e){
+            System.out.println(e);
+            System.out.println(e.getCause());
+            fail("Exception thrown");
+        }
+        System.out.println("Test passed :)");
+        return;
+    }
 }
