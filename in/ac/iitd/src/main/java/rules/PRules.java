@@ -1,5 +1,6 @@
 package rules;
 
+import com.google.common.collect.ImmutableList;
 import org.apache.calcite.plan.Convention;
 import org.apache.calcite.plan.RelOptRule;
 import org.apache.calcite.plan.RelOptTable;
@@ -15,8 +16,11 @@ import org.apache.calcite.rel.logical.LogicalSort;
 
 import convention.PConvention;
 import rel.PFilter;
+import rel.PJoin;
 import rel.PProject;
 import rel.PTableScan;
+import rel.PAggregate;
+import rel.PSort;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
@@ -123,7 +127,22 @@ public class PRules {
         @Override
         public @Nullable RelNode convert(RelNode relNode) {
             /* Write your code here */
-            return null;
+
+            if (!(relNode instanceof LogicalJoin)) {
+                return null;
+            }
+
+            final LogicalJoin join = (LogicalJoin) relNode;
+            return new PJoin(
+                    join.getCluster(),
+                    join.getTraitSet().replace(PConvention.INSTANCE),
+                    convert(join.getLeft(), join.getLeft().getTraitSet().replace(PConvention.INSTANCE)),
+                    convert(join.getRight(), join.getRight().getTraitSet().replace(PConvention.INSTANCE)),
+                    join.getCondition(),
+                    join.getVariablesSet(),
+                    join.getJoinType());
+
+            // return null;
         }
     }
 
@@ -141,7 +160,22 @@ public class PRules {
         @Override
         public @Nullable RelNode convert(RelNode relNode) {
             /* Write your code here */
-            return null;
+
+            if (!(relNode instanceof LogicalAggregate)) {
+                return null;
+            }
+
+            final LogicalAggregate aggregate = (LogicalAggregate) relNode;
+            return new PAggregate(
+                    aggregate.getCluster(),
+                    aggregate.getTraitSet().replace(PConvention.INSTANCE),
+                    aggregate.getHints(),
+                    convert(aggregate.getInput(), aggregate.getInput().getTraitSet().replace(PConvention.INSTANCE)),
+                    aggregate.getGroupSet(),
+                    aggregate.getGroupSets(),
+                    aggregate.getAggCallList());
+
+            // return null;
         }
     }
 
@@ -159,7 +193,21 @@ public class PRules {
         @Override
         public @Nullable RelNode convert(RelNode relNode) {
             /* Write your code here */
-            return null;
+            if (!(relNode instanceof LogicalSort)) {
+                return null;
+            }
+
+            final LogicalSort sort = (LogicalSort) relNode;
+            return new PSort(
+                    sort.getCluster(),
+                    sort.getTraitSet().replace(PConvention.INSTANCE),
+                    sort.getHints(),
+                    convert(sort.getInput(), sort.getInput().getTraitSet().replace(PConvention.INSTANCE)),
+                    sort.getCollation(),
+                    sort.offset,
+                    sort.fetch);
+
+            // return null;
         }
     }
 }
